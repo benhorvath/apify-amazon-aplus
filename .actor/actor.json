@@ -1,8 +1,9 @@
 {
 	"actorSpecification": 1,
 	"name": "apify-amazon-aplus",
-	"title": "Getting started with Python and BeautifulSoup",
-	"description": "Scrapes titles of websites using BeautifulSoup.",
+	"title": "apify-amazon-aplus",
+	"mainModule": "src/main.py",
+	"description": "Capture marketing information from Amazon.com products",
 	"version": "0.0",
 	"buildTag": "latest",
 	"meta": {

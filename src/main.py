@@ -1,9 +1,5 @@
-"""Module defines the main entry point for the Apify Actor.
-
-Feel free to modify this file to suit your specific needs.
-
-To build Apify Actors, utilize the Apify SDK toolkit, read more at the official documentation:
-https://docs.apify.com/sdk/python
+"""
+Module defines the main entry point for the Apify Actor.
 """
 
 from __future__ import annotations
@@ -13,6 +9,8 @@ from urllib.parse import urljoin
 from apify import Actor, Request
 from bs4 import BeautifulSoup
 from httpx import AsyncClient
+
+from src.scraper.scraper import scrape_data
 
 
 async def main() -> None:
@@ -26,7 +24,7 @@ async def main() -> None:
     async with Actor:
         # Retrieve the Actor input, and use default values if not provided.
         actor_input = await Actor.get_input() or {}
-        start_urls = actor_input.get('start_urls', [{'url': 'https://apify.com'}])
+        start_urls = actor_input.get('start_urls')  # , [{'url': ''}]
         max_depth = actor_input.get('max_depth', 0)
 
         # Exit if no start URLs are provided.
@@ -43,7 +41,7 @@ async def main() -> None:
             Actor.log.info(f'Enqueuing {url} ...')
             new_request = Request.from_url(url, user_data={'depth': 0})
             await request_queue.add_request(new_request)
-
+            
         # Create an HTTPX client to fetch the HTML content of the URLs.
         async with AsyncClient() as client:
             # Process the URLs from the request queue.
@@ -63,13 +61,12 @@ async def main() -> None:
                     # Parse the HTML content using Beautiful Soup.
                     soup = BeautifulSoup(response.content, 'html.parser')
 
-                    # If the current depth is less than max_depth, find nested links
-                    # and enqueue them.
+                    # If the current depth is less than max_depth, find nested links and enqueue them.
                     if depth < max_depth:
                         for link in soup.find_all('a'):
                             link_href = link.get('href')
                             link_url = urljoin(url, link_href)
-
+                            
                             if link_url.startswith(('http://', 'https://')):
                                 Actor.log.info(f'Enqueuing {link_url} ...')
                                 new_request = Request.from_url(
@@ -79,13 +76,7 @@ async def main() -> None:
                                 await request_queue.add_request(new_request)
 
                     # Extract the desired data.
-                    data = {
-                        'url': url,
-                        'title': soup.title.string if soup.title else None,
-                        'h1s': [h1.text for h1 in soup.find_all('h1')],
-                        'h2s': [h2.text for h2 in soup.find_all('h2')],
-                        'h3s': [h3.text for h3 in soup.find_all('h3')],
-                    }
+                    data = scrape_data(url, soup)
 
                     # Store the extracted data to the default dataset.
                     await Actor.push_data(data)
