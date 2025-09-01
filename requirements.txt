@@ -2,6 +2,6 @@
 # https://pip.pypa.io/en/latest/reference/requirements-file-format/
 
 apify==2.7.3
-beautifulsoup4==4.12.3[lxml]
+beautifulsoup4==4.12.3
 httpx==0.28.0
 types-beautifulsoup4==4.12.0.20250516
