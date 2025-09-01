@@ -92,7 +92,8 @@ def extract_review_percentages(soup):
     if meters == [0]*5:
         meters = [None]*5
     return meters
-    
+
+safe_extract(default=0)    
 def extract_numeric(text: str, kind: type = int, allow_k: bool = False):
     """
     Extracts a number from text. 
@@ -112,7 +113,8 @@ def extract_numeric(text: str, kind: type = int, allow_k: bool = False):
     if allow_k and match.group(2):  # handle K suffix
         val *= 1000
     return kind(val) if kind is int else val
-    
+
+safe_extract(default=None)
 def extract_price_json(soup) -> dict:
     """
     Extracts price components from a JSON-like string.
