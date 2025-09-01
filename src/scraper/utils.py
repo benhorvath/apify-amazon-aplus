@@ -78,11 +78,14 @@ def safe_find_all(parent, *args, **kwargs):
 
 @safe_return(default=(None, None))
 def extract_ships_and_seller(parent):
-    text = safe_find(parent, attrs={'data-feature-name': 'shipFromSoldByAbbreviated'}, text=True)
+    text = safe_find(parent, attrs={'data-feature-name': 'shipFromSoldByAbbreviated'}, text=True, default='')
     pattern = r"Ships from:\s*(.*?)\s+Sold by:\s*(.*)"
     match = re.search(pattern, text)
-    ships_from = nws(match.group(1))
-    sold_by = nws(match.group(2))
+    if match:
+        ships_from = nws(match.group(1))
+        sold_by = nws(match.group(2))
+    else:
+        ships_from, sold_by = None, None
     return ships_from, sold_by
     
 @safe_return(default=[None]*5)
