@@ -10,8 +10,7 @@
             "prefill": [
                 {"url": "https://www.amazon.com/dp/B00005MITU"},
                 {"url": "https://www.amazon.com/iHealth-Thermometer-Non-Contact-Ultra-Sensitive-Vibration/dp/B0C8JGQSGN"},
-                {"url": "https://www.amazon.com/dp/0521662877"},
-                {"url": "https://www.amazon.com/dp/027100746X"}
+                {"url": "https://www.amazon.com/dp/0521662877"}
             ],
             "editor": "requestListSources"
         },
