@@ -65,7 +65,8 @@ def scrape_data(url, soup):
                                        attrs={"data-hook": "total-review-count"}, text=True, default='')
     total_review_count = extract_numeric(total_review_count_str, kind=int)
 
-    ratings_percentages = extract_review_percentages(soup)
+    # TODO: FIX
+    # ratings_percentages = extract_review_percentages(soup)
     
     # A+ modules and features
     whats_in_the_box_exists = bool(safe_find(soup, "div",
@@ -140,13 +141,13 @@ def scrape_data(url, soup):
         'documents_titles': product_documents_titles,
         'avg_review_stars': avg_review_stars,
         'total_review_count': 0 if not total_review_count else total_review_count,
-        'ratings_histogram': {
-            5: ratings_percentages[0],
-            4: ratings_percentages[1],
-            3: ratings_percentages[2],
-            2: ratings_percentages[3],
-            1: ratings_percentages[4]   
-        },
+        # 'ratings_histogram': {
+        #     5: ratings_percentages[0],
+        #     4: ratings_percentages[1],
+        #     3: ratings_percentages[2],
+        #     2: ratings_percentages[3],
+        #     1: ratings_percentages[4]   
+        # },
         'product_details_exists': product_details_exists,
         'aplus_modules_count': aplus_modules_count,
         'aplus_v2_exists': aplus_v2_exists,
